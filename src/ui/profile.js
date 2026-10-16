@@ -17,7 +17,7 @@ export const GOALS = [
   { id: "gain", label: "Набрать" },
 ];
 
-export const DEFAULT_PROFILE = { sex: "male", age: null, height: null, weight: null, activity: 1.375, goal: "keep" };
+export const DEFAULT_PROFILE = { sex: "male", age: null, height: null, weight: null, targetWeight: null, activity: 1.375, goal: "keep" };
 
 export function profileComplete(p) {
   return !!p && p.age > 0 && p.height > 0 && p.weight > 0 && (p.sex === "male" || p.sex === "female");
@@ -39,6 +39,8 @@ export function profileForm(initial, onChange) {
       numberField("Рост", p.height, { suffix: "см", onInput: (v) => { p.height = v; emit(); } }),
       numberField("Вес", p.weight, { suffix: "кг", onInput: (v) => { p.weight = v; emit(); } }),
     ),
+    numberField("Целевой вес", p.targetWeight, { suffix: "кг", onInput: (v) => { p.targetWeight = v; emit(); } }),
+    h("p.hint", "Белок и жиры считаются от целевого веса, калории — от текущего. Пусто — от текущего."),
     h("label.field", h("span.field-label", "Активность"), activity),
     h("div.field", h("span.field-label", "Цель"), segmented(GOALS, p.goal, (v) => { p.goal = v; emit(); })),
   );

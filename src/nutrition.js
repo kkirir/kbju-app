@@ -75,7 +75,8 @@ const FAT_PER_KG = 0.9;
 
 /**
  * Дневная норма: Миффлин — Сан-Жеор × активность ± цель.
- * profile = { sex: "male"|"female", age, height (см), weight (кг), activity: 1.2…1.9, goal: "lose"|"keep"|"gain" }
+ * profile = { sex: "male"|"female", age, height (см), weight (кг), targetWeight? (кг), activity: 1.2…1.9, goal: "lose"|"keep"|"gain" }
+ * Калории — от текущего веса (обмен зависит от него), белок и жиры — от целевого, если он задан.
  */
 export function calcGoal(profile) {
   const w = num(profile?.weight), h = num(profile?.height), a = num(profile?.age);
@@ -83,8 +84,9 @@ export function calcGoal(profile) {
   const goal = GOAL_FACTOR[profile?.goal] ? profile.goal : "keep";
   const activity = num(profile?.activity) || 1.2;
   const kcal = Math.round((bmr * activity * GOAL_FACTOR[goal]) / 10) * 10;
-  const protein = Math.round(PROTEIN_PER_KG[goal] * w);
-  const fat = Math.round(FAT_PER_KG * w);
+  const macroWeight = positive(profile?.targetWeight) ?? w;
+  const protein = Math.round(PROTEIN_PER_KG[goal] * macroWeight);
+  const fat = Math.round(FAT_PER_KG * macroWeight);
   const carbs = Math.max(0, Math.round((kcal - protein * 4 - fat * 9) / 4));
   return { kcal, protein, fat, carbs };
 }

@@ -91,6 +91,17 @@ test("calcGoal: набрать +10 %; углеводы не уходят ниж�
   assert.equal(g.carbs, 0);
 });
 
+test("calcGoal: белок и жиры — от целевого веса, калории — от текущего", () => {
+  // мужчина 30, 190 см, 148 кг, 1.375, сбросить, цель 100 кг
+  // BMR = 1480 + 1187.5 − 150 + 5 = 2522.5; ×1.375×0.85 = 2948.17 → 2950
+  // Б = 1.8·100 = 180 (а не 266 от 148 кг); Ж = 0.9·100 = 90; У = (2950 − 720 − 810) / 4 = 355
+  const p = { sex: "male", age: 30, height: 190, weight: 148, activity: 1.375, goal: "lose" };
+  assert.deepEqual(calcGoal({ ...p, targetWeight: 100 }), { kcal: 2950, protein: 180, fat: 90, carbs: 355 });
+  // без целевого веса — от текущего, как раньше: Б 266, Ж 133
+  const old = calcGoal(p);
+  assert.equal(old.protein, 266); assert.equal(old.fat, 133);
+});
+
 test("mealByHour: до 11:00 завтрак, 11–16 обед, 16–21 ужин, остальное перекус", () => {
   const cases = { 7: "breakfast", 10: "breakfast", 11: "lunch", 15: "lunch", 16: "dinner", 20: "dinner", 21: "snack", 23: "snack" };
   for (const [hour, meal] of Object.entries(cases)) assert.equal(mealByHour(Number(hour)), meal, `час ${hour}`);
