@@ -8,8 +8,8 @@ window.STATE =
   "briefFile": "2026-10-16-brief.md",
   "memoryFile": "CLAUDE.md",
   "startedAt": "2026-10-16T15:54:07+02:00",
-  "updatedAt": "2026-10-16T17:20:00+02:00",
-  "finishedAt": null,
+  "updatedAt": "2026-10-16T18:15:00+02:00",
+  "finishedAt": "2026-10-16T18:15:00+02:00",
   "stages": [
     {
       "id": "preflight",
@@ -45,25 +45,29 @@ window.STATE =
     },
     {
       "id": "build",
-      "status": "active",
+      "status": "done",
       "startedAt": "2026-10-16T16:20:00+02:00",
-      "note": "2 из 3 тасков готовы"
+      "note": "3 из 3 тасков готовы",
+      "finishedAt": "2026-10-16T17:55:00+02:00"
     },
     {
       "id": "review",
-      "status": "active",
+      "status": "done",
       "startedAt": "2026-10-16T16:41:00+02:00",
-      "note": "проверено 2 из 3"
+      "note": "проверено 3 из 3",
+      "finishedAt": "2026-10-16T17:55:00+02:00"
     },
     {
       "id": "final",
-      "status": "pending"
+      "status": "done",
+      "startedAt": "2026-10-16T17:55:00+02:00",
+      "finishedAt": "2026-10-16T18:15:00+02:00"
     }
   ],
   "requirements": {
     "total": 15,
-    "done": 0,
-    "inTicket": 15,
+    "done": 15,
+    "inTicket": 0,
     "inSpec": 0,
     "placeholder": 0,
     "deferred": 0,
@@ -167,10 +171,20 @@ window.STATE =
       "zone": [
         "src/ui/capture.js"
       ],
-      "status": "in-progress",
+      "status": "done",
       "retries": 0,
-      "repairs": 0,
-      "startedAt": "2026-10-16T17:20:00+02:00"
+      "repairs": 1,
+      "startedAt": "2026-10-16T17:20:00+02:00",
+      "finishedAt": "2026-10-16T17:55:00+02:00",
+      "tests": {
+        "passed": 36,
+        "failed": 0
+      },
+      "commit": "afa57d6",
+      "concerns": [
+        "экран «нет ключа» появляется после съёмки, а не до",
+        "этикетки без названия в «Недавних» перезаписывают друг друга"
+      ]
     }
   ],
   "singlePass": null,
@@ -195,5 +209,13 @@ window.STATE =
     "deferred": 1,
     "note": "Yazio целиком — в Вне рамок; порции без массы, «Недавние», критерий Yazio — дописаны"
   },
-  "blind": null
+  "blind": {
+    "agreed": 13,
+    "partial": [
+      "R06 — остальное из Yazio вне рамок (ожидаемо)",
+      "R08 — штрих-код по фото, не живой сканер"
+    ],
+    "drift": [],
+    "note": "настоящий ИИ не проверялся — нет ключа"
+  }
 }

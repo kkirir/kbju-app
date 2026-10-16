@@ -60,3 +60,9 @@ type BarcodeResult = { ok: true; code: string } | { ok: false; reason: string };
 - *(ремонт)* `parseNumber(v)`, `parseMass(v)`, `KJ_PER_KCAL` — в `src/nutrition.js`, единственный источник. `DEFAULT_MODEL` — только из `src/ai.js`
 - `store.importAll(json|obj) -> Promise<{entries, products}>`: сначала проверяет весь файл, при ошибке бросает Error («Файл не загружен, данные не тронуты…») и ничего не пишет
 - `Entry.unit: "g"|"ml"` (по умолчанию "g", ставит saveEntry)
+
+## Из таска 03 — экраны съёмки
+
+- `openCapture(mode, ctx)` реализован: food → `openReview({kind:"items", source:"photo"})`, label → `{kind:"product", ...normalizeLabel, source:"label"}`, barcode → `{kind:"product", per100, perPortion, suggestions:[serving, package], unit:"g", source:"barcode"}`
+- Оконное событие `"kbju:navigate"` `{detail:{tab:"today"|"settings"}}` — закрывает листы и переключает вкладку (слушатель в `src/app.js`)
+- Кэш SW — `kbju-shell-v2`
