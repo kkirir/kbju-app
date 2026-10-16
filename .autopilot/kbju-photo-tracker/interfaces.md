@@ -18,6 +18,7 @@ type Macros = { kcal: number; protein: number; fat: number; carbs: number };
 type Entry = { id: string; date: string /* YYYY-MM-DD local */; meal: "breakfast"|"lunch"|"dinner"|"snack";
   name: string; grams: number|null; kcal: number; protein: number; fat: number; carbs: number;
   per100: Macros|null; portions?: { count: number; perPortion: Macros };
+  unit: "g"|"ml" /* по умолчанию "g" */;
   source: "photo"|"label"|"barcode"|"recent"|"manual"; createdAt: number };
 // readLabel ok-результат (сырой, без нормализации):
 type LabelResult = { ok: true; name: string|null; basis: "100g"|"100ml"|"portion";
@@ -46,4 +47,16 @@ type BarcodeResult = { ok: true; code: string } | { ok: false; reason: string };
 - `foodfacts.js`: `lookupBarcode(code, fetchImpl?)` → объект | `null` (не найдено); при сбое сети/5xx **бросает** Error с `kind: "network"` — UI должен отличать «нет в базе» от «нет связи». Без названия → «Продукт <код>»
 - `image.js`: `prepareImage(file) -> Promise<{ base64, mediaType: "image/jpeg" }>`
 - Тесты: `node --test` из корня (не `node --test tests/` — на Node 26 падает)
-- Общий разбор чисел: `parseNumber(v) -> number|null` («12,5», «1 046») и `parseMass(v) -> number|null` (0/отриц./нечисло → null) живут в `src/foodfacts.js`, их импортирует `ai.js`. Не пиши свои.
+- *(перенесено таском 01)* Общий разбор чисел `parseNumber`, `parseMass`, `KJ_PER_KCAL` — в `src/nutrition.js`. Не пиши свои.
+
+## Из таска 01 — каркас и дневник
+
+- `nutrition`: `scale(per100, grams)`, `sumMacros(list)`, `normalizeLabel(label) -> {per100|null, perPortion|null, unit, suggestions}`, `calcGoal({sex:"male"|"female", age, height, weight, activity:1.2…1.9, goal:"lose"|"keep"|"gain"})`, `mealByHour(h)`, `round(m)` (ккал до целых, г до 0.1), `toPer100(m, grams)`, `times(m, k)`
+- `openReview(ctx) -> Promise<Entry[]|null>` в `src/ui/review.js`; ctx = `{kind:"items", items, source}` | `{kind:"product", name, per100|null, perPortion|null, unit, suggestions, source, defaultGrams?, defaultCount?}`; необязательные общие: `date`, `meal`, `title`. Сам сохраняет, кладёт продукт в «Недавние», шлёт `window` событие `"kbju:changed"`. Ещё: `openEntryEditor(entry)`, `macroLine(m)`
+- `openCapture(mode, ctx)` в `src/ui/capture.js` — сейчас заглушка; `ctx = {date, meal?}`; `add-sheet.js` импортирует его динамически
+- Хелперы DOM — `src/ui/dom.js`, общее состояние UI — `src/ui/state.js`; используй их, не пиши свои
+- `store`: `listEntries(date)`, `saveEntry(e) -> Entry` (ставит id, createdAt), `deleteEntry(id)`, `listProducts(query)`, `upsertProduct({name, per100, perPortion, unit, suggestions, lastGrams, lastCount, source})`, `getSettings() -> {apiKey, model, profile, goal, goalManual}`, `saveSettings(patch)` (merge), `exportAll()` (без apiKey), `importAll(json|obj)`, `productKey(name)` (DEFAULT_MODEL — из ai.js)
+- Иконки генерирует `node tools/make-icons.mjs`. Service worker кэширует оболочку — **новый файл в `src/` надо добавить в список кэша в `sw.js` и поднять версию кэша**
+- *(ремонт)* `parseNumber(v)`, `parseMass(v)`, `KJ_PER_KCAL` — в `src/nutrition.js`, единственный источник. `DEFAULT_MODEL` — только из `src/ai.js`
+- `store.importAll(json|obj) -> Promise<{entries, products}>`: сначала проверяет весь файл, при ошибке бросает Error («Файл не загружен, данные не тронуты…») и ничего не пишет
+- `Entry.unit: "g"|"ml"` (по умолчанию "g", ставит saveEntry)

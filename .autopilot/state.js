@@ -8,7 +8,7 @@ window.STATE =
   "briefFile": "2026-10-16-brief.md",
   "memoryFile": "CLAUDE.md",
   "startedAt": "2026-10-16T15:54:07+02:00",
-  "updatedAt": "2026-10-16T16:50:00+02:00",
+  "updatedAt": "2026-10-16T17:20:00+02:00",
   "finishedAt": null,
   "stages": [
     {
@@ -47,13 +47,13 @@ window.STATE =
       "id": "build",
       "status": "active",
       "startedAt": "2026-10-16T16:20:00+02:00",
-      "note": "0 из 3 тасков готовы"
+      "note": "2 из 3 тасков готовы"
     },
     {
       "id": "review",
       "status": "active",
       "startedAt": "2026-10-16T16:41:00+02:00",
-      "note": "проверяется таск 02"
+      "note": "проверено 2 из 3"
     },
     {
       "id": "final",
@@ -95,10 +95,19 @@ window.STATE =
         "src/nutrition.js",
         "src/store.js"
       ],
-      "status": "in-progress",
+      "status": "done",
       "startedAt": "2026-10-16T16:20:00+02:00",
       "retries": 0,
-      "repairs": 0
+      "repairs": 1,
+      "finishedAt": "2026-10-16T17:20:00+02:00",
+      "tests": {
+        "passed": 14,
+        "failed": 0
+      },
+      "commit": "bbaec1d",
+      "concerns": [
+        "store импортирует DEFAULT_MODEL из ai.js"
+      ]
     },
     {
       "id": "02",
@@ -118,10 +127,25 @@ window.STATE =
         "src/foodfacts.js",
         "src/image.js"
       ],
-      "status": "repair",
+      "status": "done",
       "startedAt": "2026-10-16T16:20:00+02:00",
       "retries": 0,
-      "repairs": 1
+      "repairs": 1,
+      "finishedAt": "2026-10-16T16:58:00+02:00",
+      "tests": {
+        "passed": 22,
+        "failed": 0
+      },
+      "commit": "6a7931b",
+      "files": [
+        "src/ai.js",
+        "src/foodfacts.js",
+        "src/image.js"
+      ],
+      "concerns": [
+        "parseNumber живёт в foodfacts.js, ai.js его импортирует",
+        "image.js проверяется вручную в Safari"
+      ]
     },
     {
       "id": "03",
@@ -143,13 +167,17 @@ window.STATE =
       "zone": [
         "src/ui/capture.js"
       ],
-      "status": "pending",
+      "status": "in-progress",
       "retries": 0,
-      "repairs": 0
+      "repairs": 0,
+      "startedAt": "2026-10-16T17:20:00+02:00"
     }
   ],
   "singlePass": null,
-  "tests": null,
+  "tests": {
+    "passed": 36,
+    "failed": 0
+  },
   "debt": {
     "placeholders": [
       "Ключ Claude API — вставляется в Настройках приложения"
