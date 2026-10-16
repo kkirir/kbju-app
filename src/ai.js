@@ -1,7 +1,7 @@
 // Разговор с Claude (Anthropic Messages API) прямо из браузера.
 // Модуль не трогает DOM и window: его импортируют Node-тесты.
 
-import { parseNumber, parseMass } from "./foodfacts.js";
+import { parseNumber, parseMass } from "./nutrition.js";
 
 const API_URL = "https://api.anthropic.com/v1/messages";
 const API_VERSION = "2023-06-01";
@@ -215,7 +215,7 @@ async function callTool(mode, img, prompt, cfg) {
 
 // ---------- разбор ----------
 
-// Разбор чисел и масс — общий с foodfacts (parseNumber / parseMass), чтобы правила совпадали.
+// Разбор чисел и масс — общий на проект (parseNumber / parseMass из nutrition).
 function needNum(v, field) {
   const n = parseNumber(v);
   if (n === null || n < 0) throw new AiError("bad-response", `поле ${field}: ${JSON.stringify(v)}`);

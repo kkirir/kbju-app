@@ -1,23 +1,8 @@
 // Поиск продукта по штрих-коду в Open Food Facts. Без DOM и window.
 
+import { parseNumber, parseMass, KJ_PER_KCAL } from "./nutrition.js";
+
 const FIELDS = "product_name,product_name_ru,nutriments,serving_quantity,product_quantity";
-const KJ_PER_KCAL = 4.184;
-
-// Общий разбор числа (его же использует ai.js): число или строка вида «12,5» / «1 046».
-// Возвращает конечное число или null.
-export function parseNumber(v) {
-  let n = NaN;
-  if (typeof v === "number") n = v;
-  else if (typeof v === "string" && v.trim() !== "") n = Number(v.trim().replace(/\s/g, "").replace(",", "."));
-  return Number.isFinite(n) ? n : null;
-}
-
-// Единое правило для масс порции/упаковки (portionGrams, packageGrams, servingGrams):
-// ноль, отрицательное или нечисло означает «масса неизвестна» → null, а не ошибку.
-export function parseMass(v) {
-  const n = parseNumber(v);
-  return n !== null && n > 0 ? n : null;
-}
 
 function text(v) {
   return typeof v === "string" && v.trim() ? v.trim() : null;
