@@ -112,11 +112,12 @@ const sheetStack = [];
  */
 export function openSheet({ title, body, footer, onClose, className } = {}) {
   const closeBtn = h("button.icon-btn", { type: "button", "aria-label": "Закрыть" }, "✕");
+  const titleEl = h("h2.sheet-title", title || "");
   const bodyEl = h("div.sheet-body", body);
   const footerEl = h("div.sheet-footer", footer);
   if (!footer) footerEl.hidden = true;
   const panel = h("div.sheet" + (className ? "." + className : ""), { role: "dialog", "aria-modal": "true", "aria-label": title || "" },
-    h("div.sheet-head", h("h2.sheet-title", title || ""), closeBtn),
+    h("div.sheet-head", titleEl, closeBtn),
     bodyEl,
     footerEl,
   );
@@ -130,6 +131,7 @@ export function openSheet({ title, body, footer, onClose, className } = {}) {
     el: panel,
     body: bodyEl,
     footer: footerEl,
+    setTitle(text) { titleEl.textContent = text || ""; panel.setAttribute("aria-label", text || ""); },
     setFooter(...nodes) { clear(footerEl); append(footerEl, nodes); footerEl.hidden = !nodes.length; },
     close() {
       if (closed) return;

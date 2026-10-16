@@ -2,7 +2,7 @@
 // Стратегия: сначала сеть (чтобы обновления приходили сразу), без сети — из кэша.
 // Запросы к другим доменам (api.anthropic.com, Open Food Facts) не трогаем.
 
-const CACHE = "kbju-shell-v1";
+const CACHE = "kbju-shell-v2";
 // Ядро оболочки: без любого из этих файлов приложение не работает офлайн — установка падает.
 const CORE = [
   "./",
@@ -13,6 +13,8 @@ const CORE = [
   "./src/nutrition.js",
   "./src/store.js",
   "./src/ai.js",
+  "./src/image.js",
+  "./src/foodfacts.js",
   "./src/ui/dom.js",
   "./src/ui/state.js",
   "./src/ui/today.js",
@@ -26,13 +28,11 @@ const CORE = [
   "./src/ui/capture.js",
 ];
 
-// Необязательное: иконки и модули, которые грузятся по требованию. Пропуск не ломает установку.
+// Необязательное: иконки. Пропуск не ломает установку.
 const OPTIONAL = [
   "./icons/apple-touch-icon.png",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
-  "./src/foodfacts.js",
-  "./src/image.js",
 ];
 
 const fresh = (url) => new Request(url, { cache: "reload" });

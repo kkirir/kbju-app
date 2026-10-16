@@ -35,6 +35,12 @@ function switchTab(id) {
   render();
 }
 
+// Переход на вкладку из листов (например, «В настройки» с экрана «нет ключа»).
+window.addEventListener("kbju:navigate", (e) => {
+  const id = e.detail?.tab;
+  if (id === "today" || id === "settings") { closeAllSheets(); switchTab(id); }
+});
+
 window.addEventListener("kbju:changed", (e) => {
   if (tab === "today" || e.detail?.what === "all") render();
 });
